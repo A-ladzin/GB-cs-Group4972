@@ -10,7 +10,7 @@ using System.Text.Unicode;
 HomeWork a = new HomeWork();
 a.Task10();
 a.Task13starred();
-Console.WriteLine(a.Task15());
+Console.WriteLine(a.Task15starred());
 class HomeWork
 {
     
@@ -104,7 +104,7 @@ class HomeWork
 	return response;
 }
 
-    public bool Task15(){ // Проверяет является ли определенный день текущей недели выходным днем по производственному календарю, в рамках одного года.
+    public bool Task15starred(){ // Проверяет является ли определенный день текущей недели выходным днем по производственному календарю, в рамках одного года.
         Console.WriteLine("Task15");
         short n = (short)parseLongFromUser(1);
         Console.OutputEncoding = Encoding.UTF8;
@@ -114,8 +114,26 @@ class HomeWork
             return true;
         }
 
+  
+
         DateTime now = DateTime.Now;
-        // now= new DateTime(2023,02,22);
+        // now= new DateTime(yyyy,mm,dd);
+
+
+        //Секция со звездочкой
+        Dictionary<int,String> weekdays= new Dictionary<int,String>{
+                                                                        {1, "Понедельник" }, 
+                                                                        {2, "Вторник"}, 
+                                                                        {3, "Среда"}, 
+                                                                        {4, "Четверг"}, {
+                                                                            5, "Пятница"}, 
+                                                                            {6, "Суббота"}
+                                                                            ,{7, "Воскресеньк"}
+                                                                    };
+
+        Console.WriteLine("\n*"+weekdays[n]+"*\n");
+        //
+     
         int month = now.Month;
         int dow = (int)now.DayOfWeek;
         if(dow == 0) dow = 7;
