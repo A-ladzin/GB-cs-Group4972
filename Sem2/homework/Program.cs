@@ -11,14 +11,14 @@ a.Task10();
 class HomeWork
 {
     
-    public int parseIntFromUser(int d) //Принимает желаемое количество знаков в качестве аргумента.
+    public int parseIntFromUser(int d) //Принимает желаемое количество знаков в качестве аргумента, возвращает первое желаемое количество цифр единым числом.
     {
         unsafe
         {
 
             Console.Write("Enter a");
             Console.WriteLine(" number.");
-            String data = Console.ReadLine();
+            String data = Console.ReadLine()??"0";
             fixed (char* ptr = data)
             {
                 int index = 0;
@@ -28,7 +28,7 @@ class HomeWork
                 bool count = false;
                 while ((int)*(ptr + index) != 0)
                 {
-                    if (d == 0) return sign?-num:num;
+                    
                     if (((int)*(ptr + index)) > 47 && ((int)*(ptr + index)) < 58)
                     {
                         if (is_digit)
@@ -38,6 +38,7 @@ class HomeWork
                         }
                         num += (((int)*(ptr + index)) - 48);
                         d--;
+                        if (d == 0) return sign?-num:num;
                         is_digit = true;
 
                     }
@@ -52,18 +53,14 @@ class HomeWork
                     }
                     index++;
                 }
-                if (!count)
-                {
-                    throw new ArgumentException("Not Enough Numbers.");
-
-                }
-                return sign?-num:num;
+                throw new ArgumentException("Not Enough Digits.");
             }
         }
     }
 
     public void Task10(){
-        
+        Console.WriteLine(parseIntFromUser(3)/10%10);
+
     }
 
 
