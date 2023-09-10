@@ -1,18 +1,20 @@
 ﻿
 using System.Linq.Expressions;
 using System.Net.Http;
+using System.Text;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
+using System.Text.Unicode;
 
 
 HomeWork a = new HomeWork();
-// a.Task10();
-// a.Task13starred();
+a.Task10();
+a.Task13starred();
 Console.WriteLine(a.Task15());
 class HomeWork
 {
     
-    public long parseLongFromUser(int d) //Принимает желаемое количество знаков в качестве аргумента, возвращает первое желаемое количество цифр из строки ввода единым числом. 
+    public long parseLongFromUser(int d) //Takes an arbitrary number of digits as an argument, returns the first occurrence of the desired number of digits from console as a single integer.
     {
         unsafe
         {
@@ -72,8 +74,9 @@ class HomeWork
     public void Task13starred(){
         Console.WriteLine("Task13");
         long number = parseLongFromUser(-1);
-        long count = -3;
+        long count = 0;
         long temp = number;
+        //Считает количество разрядов
         while(temp!=0){
             temp/=10;
             count++;
@@ -82,15 +85,16 @@ class HomeWork
             Console.WriteLine("There is no third digit");
             return;
         }
-        
-        for(int i = 0; i < count; i++){
+        //Округляет число до трех высших разрядов
+        for(int i = 0; i < count-3; i++){
             number /= 10;
         }
+
+        //Выводит последнюю цифру
         Console.WriteLine(number%10);
         
 
     }
-
 
 
     private static async Task<string> CallUrl(string fullUrl)
@@ -99,11 +103,19 @@ class HomeWork
 	var response = await client.GetStringAsync(fullUrl);
 	return response;
 }
-    public bool Task15(){
+
+    public bool Task15(){ // Проверяет является ли определенный день текущей недели выходным днем по производственному календарю, в рамках одного года.
+        Console.WriteLine("Task15");
         int n = int.Parse(Console.ReadLine()??"0");
-        if (n < 1 || n > 7) Console.WriteLine("Дня недели нет");
+        Console.OutputEncoding = Encoding.UTF8;
+
+        if (n < 1 || n > 7) {
+            Console.WriteLine("Не неделя");
+            return true;
+        }
+
         DateTime now = DateTime.Now;
-        // now= new DateTime(2023,10,01);
+        // now= new DateTime(2023,02,22);
         int month = now.Month;
         int dow = (int)now.DayOfWeek;
         if(dow == 0) dow = 7;
@@ -112,21 +124,30 @@ class HomeWork
         var url = "https://www.consultant.ru/law/ref/calendar/proizvodstvennye/2023/";
 
         String response = CallUrl(url).Result;
+
+        //scraping
         int m = response.IndexOf("month");
         response = response.Substring(m+1,response.Length-m-1);
+
+        //Jump to the previous month;
         for(int i = 1; i < month-1; i++){
             m = response.IndexOf("month");
             day_counter += DateTime.DaysInMonth(now.Year,i);
             response = response.Substring(m+1,response.Length-m-1);
         }
 
-
+        //Skip every empty cell
         removeEmpties(response);
+
+        //Find monday of the current week
         response = nextSlice(response,last_mon);
 
+        
         day_counter = 1;
+        //Start from monday
         response = nextSlice(response,n);
 
+        //Check if holiday
         if (response[0] == 'h' || response[0] == 'w') return true;
 
         return false;
@@ -137,6 +158,7 @@ class HomeWork
 
     public String removeEmpties(String response)
     {
+        //scraping
     while(response[response.IndexOf("td class")+10] == 'i'){
             int next_cell = response.IndexOf("td class")+10;
             response = response.Substring(next_cell, response.Length-next_cell);
@@ -146,8 +168,12 @@ class HomeWork
 
     public String nextSlice(String response, int day_of_the_year)
     {
+
+
         while(day_counter < day_of_the_year){
+        //in case of the end of the month
         response = removeEmpties(response);
+        //scraping
         int next_cell = response.IndexOf("td class")+10;
         response = response.Substring(next_cell, response.Length-next_cell);
             day_counter++;   
