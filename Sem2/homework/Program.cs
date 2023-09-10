@@ -106,7 +106,7 @@ class HomeWork
 
     public bool Task15(){ // Проверяет является ли определенный день текущей недели выходным днем по производственному календарю, в рамках одного года.
         Console.WriteLine("Task15");
-        int n = int.Parse(Console.ReadLine()??"0");
+        short n = (short)parseLongFromUser(1);
         Console.OutputEncoding = Encoding.UTF8;
 
         if (n < 1 || n > 7) {
