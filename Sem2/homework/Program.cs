@@ -1,13 +1,14 @@
 ﻿
 using System.Linq.Expressions;
+using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
 
 
 HomeWork a = new HomeWork();
-a.Task10();
-a.Task13starred();
-
+// a.Task10();
+// a.Task13starred();
+Console.WriteLine(a.Task15());
 class HomeWork
 {
     
@@ -90,9 +91,71 @@ class HomeWork
 
     }
 
-    public void Task15(){
-        
+
+
+    private static async Task<string> CallUrl(string fullUrl)
+{
+	HttpClient client = new HttpClient();
+	var response = await client.GetStringAsync(fullUrl);
+	return response;
+}
+    public bool Task15(){
+        int n = int.Parse(Console.ReadLine()??"0");
+        if (n < 1 || n > 7) Console.WriteLine("Дня недели нет");
+        DateTime now = DateTime.Now;
+        // now= new DateTime(2023,10,01);
+        int month = now.Month;
+        int dow = (int)now.DayOfWeek;
+        if(dow == 0) dow = 7;
+        int day = now.DayOfYear;
+        int last_mon = day-dow+1;
+        var url = "https://www.consultant.ru/law/ref/calendar/proizvodstvennye/2023/";
+
+        String response = CallUrl(url).Result;
+        int m = response.IndexOf("month");
+        response = response.Substring(m+1,response.Length-m-1);
+        for(int i = 1; i < month-1; i++){
+            m = response.IndexOf("month");
+            day_counter += DateTime.DaysInMonth(now.Year,i);
+            response = response.Substring(m+1,response.Length-m-1);
+        }
+
+
+        removeEmpties(response);
+        response = nextSlice(response,last_mon);
+
+        day_counter = 1;
+        response = nextSlice(response,n);
+
+        if (response[0] == 'h' || response[0] == 'w') return true;
+
+        return false;
+
     }
+
+    private int day_counter = 0;
+
+    public String removeEmpties(String response)
+    {
+    while(response[response.IndexOf("td class")+10] == 'i'){
+            int next_cell = response.IndexOf("td class")+10;
+            response = response.Substring(next_cell, response.Length-next_cell);
+        }
+        return response;
+    }
+
+    public String nextSlice(String response, int day_of_the_year)
+    {
+        while(day_counter < day_of_the_year){
+        response = removeEmpties(response);
+        int next_cell = response.IndexOf("td class")+10;
+        response = response.Substring(next_cell, response.Length-next_cell);
+            day_counter++;   
+        }
+        return response;
+
+    }
+    
 
 
 }
