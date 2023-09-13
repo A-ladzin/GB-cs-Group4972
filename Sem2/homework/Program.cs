@@ -14,7 +14,7 @@ Console.WriteLine(a.Task15starred());
 class HomeWork
 {
     
-    public long parseLongFromUser(int d) //Takes an arbitrary number of digits as an argument, returns the first occurrence of the desired number of digits from console as a single integer.
+    private long parseLongFromUser(int d) //Takes an arbitrary number of digits as an argument, returns the first occurrence of the desired number of digits from console as a single integer.
     {
         unsafe
         {
@@ -174,7 +174,7 @@ class HomeWork
 
     private int day_counter = 0;
 
-    public String removeEmpties(String response)
+    private String removeEmpties(String response)
     {
         //scraping
     while(response[response.IndexOf("td class")+10] == 'i'){
@@ -184,7 +184,7 @@ class HomeWork
         return response;
     }
 
-    public String nextSlice(String response, int day_of_the_year)
+    private String nextSlice(String response, int day_of_the_year)
     {
 
 
