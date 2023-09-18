@@ -98,8 +98,14 @@ class Calculator{
                         {
                             num = !num;
                             if(sign) temp*=-1;
+                            sign = false;
                         if (((int)*(ptr + corr)) == 46){
                             point = true;
+                            num = !num;
+                            corr++;
+                            continue;
+                        }
+                        else if (((int)*(ptr + corr)) == 32){
                             num = !num;
                             corr++;
                             continue;
@@ -125,13 +131,16 @@ class Calculator{
                             ops.Enqueue(() => pow());
                         }
 
-                        else if (((int)*(ptr + corr)) == 32){}
+
                         else throw new ArgumentException("Something went wrong.");
                         sign = false;
                         point = false;
                         fixed_point_position = 1;
                         }
-                        else if (((int)*(ptr + corr)) == 32){}
+                        else if (((int)*(ptr + corr)) == 32){
+                            corr++;
+                            continue;
+                        }
                         else if(((int)*(ptr + corr)) == 45){
                             sign = true;
                         }
