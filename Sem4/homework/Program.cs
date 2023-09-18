@@ -29,3 +29,9 @@ class HomeWork{
             //TODO random name choice;
 }
 
+
+
+class Calculator{
+    
+}
+
