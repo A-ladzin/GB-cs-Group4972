@@ -34,30 +34,46 @@ class HomeWork{
 class Calculator{
 
 
-    private Queue<Action> ops = new Queue<Action>();
+    private Queue<Action<Calculator>> ops = new Queue<Action<Calculator>>();
     private Queue<double> numbers = new Queue<double>();
+
+    private bool recursive;
+    public Calculator(Calculator other)
+    {
+        ops = new Queue<Action<Calculator>>(other.ops);
+        numbers = new Queue<double>(other.numbers);
+        first_number = numbers.Dequeue();
+        if(ops.Count() != 0) ops.Dequeue();
+        recursive = true;
+        Console.WriteLine("Copied");
+    }
+
+    public Calculator(){
+        recursive = false;
+    }
+
 
     private double first_number;
     private double second_number;
-    private void mult(){
-        first_number =  first_number*second_number;
+    private void mult(Calculator obj){
+        obj.first_number =  obj.first_number*obj.second_number;
     }
-    private void sum(){
-        first_number = first_number+second_number;
+    private void sum(Calculator obj){
+        obj.first_number = obj.first_number+obj.second_number;
     }
-    private void sub(){
-        first_number = first_number-second_number;
+    private void sub(Calculator obj){
+        obj.first_number = obj.first_number-obj.second_number;
     }
-    private void div(){
-        first_number = first_number/second_number;
+    private void div(Calculator obj){
+        obj.first_number = obj.first_number/obj.second_number;
     }
-    private void pow(){
+    private void pow(Calculator obj){
         double temp = 1;
-        for(int i = 0; i < second_number; i++)
+        for(int i = 0; i < obj.second_number; i++)
         {
-            temp*= first_number;
+            temp*= obj.first_number;
         }
-        first_number = temp;
+        obj.first_number = temp;
     }
     private void Parser()
     {
@@ -114,21 +130,26 @@ class Calculator{
 
                         if (((int)*(ptr + corr)) == 42)
                         {
-                            ops.Enqueue(() => mult());
+                            Action<Calculator> tempA = mult;
+                            ops.Enqueue(tempA);
                         }
                         else if (((int)*(ptr + corr)) == 43)
                         {
-                            ops.Enqueue(() => sum());
+                            Action<Calculator> tempA = sum;
+                            ops.Enqueue(tempA);
                         }
                          else if(((int)*(ptr + corr)) == 45){
-                            ops.Enqueue(() => sub());
+                            Action<Calculator> tempA = sub;
+                            ops.Enqueue(tempA);
                         }
                         else if (((int)*(ptr + corr)) == 47)
                         {
-                            ops.Enqueue(() => div());
+                            Action<Calculator> tempA = div;
+                            ops.Enqueue(tempA);
                         }
                         else if (((int)*(ptr + corr)) == 94){
-                            ops.Enqueue(() => pow());
+                            Action<Calculator> tempA = pow;
+                            ops.Enqueue(tempA);
                         }
 
 
@@ -162,15 +183,45 @@ class Calculator{
 
     public double Calculate()
     {
-        Parser();
-        first_number = numbers.Dequeue();
-        while(numbers.Count != 0){
-            second_number = numbers.Dequeue();
-            ops.Dequeue()();
+        
+        if(!recursive) {
+            Parser();
+            first_number = numbers.Dequeue();
         }
+        Console.WriteLine(ops.Count());
+        if(ops.Count() == 0 || numbers.Count() == 0) return first_number;
+
+        
+        
+
+            if (ops.Peek().Method.Name[ops.Peek().Method.Name.Length-1] == '4'){
+                Console.WriteLine("Pow");
+                second_number = new Calculator(this).Calculate();
+                Console.WriteLine($"Returned pow: {second_number}");
+                
+            }
+
+            else if(ops.Peek().Method.Name[ops.Peek().Method.Name.Length-1] == '0' || ops.Peek().Method.Name[ops.Peek().Method.Name.Length-1] == '3'){
+                Console.WriteLine("Mult");
+                second_number = new Calculator(this).Calculate();
+                Console.WriteLine($"Returned mult: {second_number}");
+
+            }
+            else {
+                Console.WriteLine("Sum");
+                second_number = new Calculator(this).Calculate();
+                Console.WriteLine($"Returned sum: {second_number}");
+            }
+            Console.Write(first_number);
+            Console.WriteLine(second_number);
+            ops.Dequeue()(this);
+            Console.Write(first_number);
+            Console.WriteLine(second_number);
+            Console.WriteLine("Operated");
 
         return first_number;
     }
+
 
 
 
