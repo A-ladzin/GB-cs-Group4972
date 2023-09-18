@@ -1,7 +1,7 @@
 ﻿using System.Numerics;
 
 Calculator a = new Calculator();
-a.Parser();
+Console.WriteLine(a.Calculate());
 
 class HomeWork{
 
@@ -37,12 +37,29 @@ class Calculator{
     private Queue<Action> ops = new Queue<Action>();
     private Queue<double> numbers = new Queue<double>();
 
-    private void mult(){}
-    private void sum(){}
-    private void sub(){}
-    private void div(){}
-    private void pow(){}
-    public void Parser()
+    private double first_number;
+    private double second_number;
+    private void mult(){
+        first_number =  first_number*second_number;
+    }
+    private void sum(){
+        first_number = first_number+second_number;
+    }
+    private void sub(){
+        first_number = first_number-second_number;
+    }
+    private void div(){
+        first_number = first_number/second_number;
+    }
+    private void pow(){
+        double temp = 1;
+        for(int i = 0; i < second_number; i++)
+        {
+            temp*= first_number;
+        }
+        first_number = temp;
+    }
+    private void Parser()
     {
         unsafe
         {
@@ -55,7 +72,7 @@ class Calculator{
                 bool num = false;
                 bool sign = false;
                 bool point = false;
-                int fixed_point_position = 0;
+                int fixed_point_position = 1;
                 while ((int)*(ptr + corr) != 0)
                 {
                     if (((int)*(ptr + corr)) > 47 && ((int)*(ptr + corr)) < 58)
@@ -64,15 +81,15 @@ class Calculator{
                         {
                             if(point){
                                 fixed_point_position *= 10;
-                                temp+=(((int)*(ptr + corr)) - 48)/(10*fixed_point_position);
+                                
                             }
-                            temp *= 10;
+                            else temp *= 10;
                         }
                         else
                         {
                             num = !num;
                         }
-                        temp += (((int)*(ptr + corr)) - 48);
+                        temp+=((((double)*(ptr + corr)) - 48)/fixed_point_position);
                   
                     }
                     else
@@ -81,13 +98,15 @@ class Calculator{
                         {
                             num = !num;
                             if(sign) temp*=-1;
-                            numbers.Enqueue(temp);
                         if (((int)*(ptr + corr)) == 46){
                             point = true;
                             num = !num;
+                            corr++;
                             continue;
                         }
-                        else if (((int)*(ptr + corr)) == 42)
+                            numbers.Enqueue(temp);
+
+                        if (((int)*(ptr + corr)) == 42)
                         {
                             ops.Enqueue(() => mult());
                         }
@@ -110,7 +129,7 @@ class Calculator{
                         else throw new ArgumentException("Something went wrong.");
                         sign = false;
                         point = false;
-                        fixed_point_position = 0;
+                        fixed_point_position = 1;
                         }
                         else if (((int)*(ptr + corr)) == 32){}
                         else if(((int)*(ptr + corr)) == 45){
@@ -121,12 +140,33 @@ class Calculator{
                     }
                     corr++;
                 }
-                Console.WriteLine(ops.Dequeue());
-                Console.WriteLine(numbers.Dequeue());
+                    if (num)
+                        {
+                            if(sign) temp*=-1;
+                            numbers.Enqueue(temp);
+                        }
+                        else throw new ArgumentException("Something went wrong.");
                 return;
             }
         }
+    }// End Parser
+
+    public double Calculate()
+    {
+        Parser();
+        first_number = numbers.Dequeue();
+        while(numbers.Count != 0){
+            second_number = numbers.Dequeue();
+            ops.Dequeue()();
+        }
+
+        return first_number;
     }
+
+
+
+
+
 }
 
 
