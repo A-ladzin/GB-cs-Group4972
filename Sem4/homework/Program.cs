@@ -36,11 +36,19 @@ class HomeWork{
 class Calculator{
 
 
+    //Operations Queue
     static private Queue<Action<Calculator>> ops = new Queue<Action<Calculator>>();
+    //Numbers Queue
     static private Queue<double> numbers = new Queue<double>();
 
+
+    //Using recursion to keep order of operations
     private bool recursive;
+
+    //Tracking priority of operations
     private int priority = 0;
+
+    //Copy Constructor
     public Calculator(Calculator other, int priority)
     {
         this.priority = priority;
@@ -49,14 +57,22 @@ class Calculator{
         Console.WriteLine("Copied");
     }
 
+
+    //Default Constructor;
     public Calculator(){
         recursive = false;
         priority = 0;
     }
 
-
+    //lNumber
     private double first_number;
+
+    //rNumber
     private double second_number;
+
+
+
+    //List of operations
     static private void mult(Calculator obj){
         obj.first_number =  obj.first_number*obj.second_number;
     }
@@ -77,12 +93,17 @@ class Calculator{
         }
         obj.first_number = temp;
     }
+
+
+
+
+    //Expression decoder / building numbers and operations queues
     private void Parser()
     {
         unsafe
         {
             Console.Write("Enter an expression");
-            String data = Console.ReadLine();
+            String data = Console.ReadLine()??"0";
             fixed (char* ptr = data)
             {
                 int corr = 0;
@@ -181,24 +202,27 @@ class Calculator{
                 return;
             }
         }
-    }// End Parser
+    }// Decoded
 
+
+
+
+    //Main function - using recursive method each time the priority of the next operation is greater than current, remembering the entry-point priority of each recursive block, using static Queue, single iteration through numbers/operations Queue -> presumably O(n) complexity;
     public double Calculate()
     {
-        
+        //Check if init
         if(!recursive) {
             Parser();
             first_number = numbers.Dequeue();
         }
         Console.WriteLine(ops.Count());
 
-        
+        //Check last
         while(numbers.Count() > 0){
 
-    
+            
             if (ops.Peek().Method.Name == "pow"){
                 Console.WriteLine("Pow");
-                priority = 2;
                 second_number = numbers.Dequeue();
                 ops.Dequeue()(this);
                 Console.WriteLine($"Returned pow: {second_number}");
@@ -208,6 +232,7 @@ class Calculator{
             else if(ops.Peek().Method.Name == "mult" || ops.Peek().Method.Name == "div"){
                 Console.WriteLine("Mult");
                 Console.WriteLine(first_number);
+                //Returning partial result if the current priority is less than the entry-point priority
                 if(priority> 1) return first_number;
                 Action<Calculator> tempMethod = ops.Dequeue();
                 if(ops.Count == 0){
@@ -216,6 +241,7 @@ class Calculator{
                     break;
                 }
                 if(ops.Peek().Method.Name == "pow") {
+                    //Starting recursive block if the next priority is greater than current
                     second_number = new Calculator(this,1).Calculate();
                     tempMethod(this);
                 }
