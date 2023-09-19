@@ -1,8 +1,12 @@
 ﻿using System.Numerics;
+using System.Security.Cryptography.X509Certificates;
 
 HomeWork homework = new HomeWork();
-
+var end = DateTime.Now;
+var start = DateTime.Now;
 Console.WriteLine(homework.Task25starred());
+end = DateTime.Now;
+Console.WriteLine(end-start);
 class HomeWork{
     public BigInteger Task25(int A, int B){
         BigInteger result = 1;
@@ -28,6 +32,10 @@ class HomeWork{
     }
 
 
+
+    private String readData(){
+        return Console.ReadLine()??"0";
+    }
 
             //TODO random name choice;
 }
@@ -213,6 +221,8 @@ class Calculator{
         //Check if init
         if(!recursive) {
             Parser();
+            end = DateTime.Now;
+
             first_number = numbers.Dequeue();
         }
         Console.WriteLine(ops.Count());
