@@ -1,7 +1,9 @@
 ﻿using System.Numerics;
 
 Calculator a = new Calculator();
-Console.WriteLine(a.Calculate());
+double result = a.Calculate();
+Console.WriteLine();
+Console.WriteLine($"RESULT: {result}");
 
 class HomeWork{
 
@@ -34,40 +36,40 @@ class HomeWork{
 class Calculator{
 
 
-    private Queue<Action<Calculator>> ops = new Queue<Action<Calculator>>();
-    private Queue<double> numbers = new Queue<double>();
+    static private Queue<Action<Calculator>> ops = new Queue<Action<Calculator>>();
+    static private Queue<double> numbers = new Queue<double>();
 
     private bool recursive;
-    public Calculator(Calculator other)
+    private int priority = 0;
+    public Calculator(Calculator other, int priority)
     {
-        ops = new Queue<Action<Calculator>>(other.ops);
-        numbers = new Queue<double>(other.numbers);
+        this.priority = priority;
         first_number = numbers.Dequeue();
-        if(ops.Count() != 0) ops.Dequeue();
         recursive = true;
         Console.WriteLine("Copied");
     }
 
     public Calculator(){
         recursive = false;
+        priority = 0;
     }
 
 
     private double first_number;
     private double second_number;
-    private void mult(Calculator obj){
+    static private void mult(Calculator obj){
         obj.first_number =  obj.first_number*obj.second_number;
     }
-    private void sum(Calculator obj){
+    static private void sum(Calculator obj){
         obj.first_number = obj.first_number+obj.second_number;
     }
-    private void sub(Calculator obj){
+    static private void sub(Calculator obj){
         obj.first_number = obj.first_number-obj.second_number;
     }
-    private void div(Calculator obj){
+    static private void div(Calculator obj){
         obj.first_number = obj.first_number/obj.second_number;
     }
-    private void pow(Calculator obj){
+    static private void pow(Calculator obj){
         double temp = 1;
         for(int i = 0; i < obj.second_number; i++)
         {
@@ -189,44 +191,71 @@ class Calculator{
             first_number = numbers.Dequeue();
         }
         Console.WriteLine(ops.Count());
-        if(ops.Count() == 0 || numbers.Count() == 0) return first_number;
 
         
-        
+        while(numbers.Count() > 0){
 
-            if (ops.Peek().Method.Name[ops.Peek().Method.Name.Length-1] == '4'){
+    
+            if (ops.Peek().Method.Name == "pow"){
                 Console.WriteLine("Pow");
-                second_number = new Calculator(this).Calculate();
+                priority = 2;
+                second_number = numbers.Dequeue();
+                ops.Dequeue()(this);
                 Console.WriteLine($"Returned pow: {second_number}");
                 
             }
 
-            else if(ops.Peek().Method.Name[ops.Peek().Method.Name.Length-1] == '0' || ops.Peek().Method.Name[ops.Peek().Method.Name.Length-1] == '3'){
+            else if(ops.Peek().Method.Name == "mult" || ops.Peek().Method.Name == "div"){
                 Console.WriteLine("Mult");
-                second_number = new Calculator(this).Calculate();
+                Console.WriteLine(first_number);
+                if(priority> 1) return first_number;
+                Action<Calculator> tempMethod = ops.Dequeue();
+                if(ops.Count == 0){
+                    second_number = numbers.Dequeue();
+                    tempMethod(this);
+                    break;
+                }
+                if(ops.Peek().Method.Name == "pow") {
+                    second_number = new Calculator(this,1).Calculate();
+                    tempMethod(this);
+                }
+                else{
+                    second_number = numbers.Dequeue();
+                    tempMethod(this);
+                }
                 Console.WriteLine($"Returned mult: {second_number}");
 
             }
             else {
                 Console.WriteLine("Sum");
-                second_number = new Calculator(this).Calculate();
+                if(priority> 0) return first_number;
+                Action<Calculator> tempMethod = ops.Dequeue();
+                if(ops.Count == 0){
+                    second_number = numbers.Dequeue();
+                    tempMethod(this);
+                    break;
+                }
+                if(ops.Peek().Method.Name != "sum" && ops.Peek().Method.Name != "sub") {
+                    second_number = new Calculator(this,0).Calculate();
+                    tempMethod(this);
+                }
+                else{
+                    second_number = numbers.Dequeue();
+                    tempMethod(this);
+                }
+                
                 Console.WriteLine($"Returned sum: {second_number}");
             }
-            Console.Write(first_number);
-            Console.WriteLine(second_number);
-            ops.Dequeue()(this);
-            Console.Write(first_number);
-            Console.WriteLine(second_number);
             Console.WriteLine("Operated");
 
-        return first_number;
+        
     }
 
+    return first_number;
 
 
 
-
-
+}
 }
 
 
