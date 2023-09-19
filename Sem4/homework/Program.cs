@@ -4,8 +4,6 @@ HomeWork homework = new HomeWork();
 
 Console.WriteLine(homework.Task25starred());
 class HomeWork{
-
-        //TODO starred  - calculator;
     public BigInteger Task25(int A, int B){
         BigInteger result = 1;
         for(int i = 0; i < B; i++){
