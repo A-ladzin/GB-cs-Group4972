@@ -1,10 +1,8 @@
 ﻿using System.Numerics;
 
-Calculator a = new Calculator();
-double result = a.Calculate();
-Console.WriteLine();
-Console.WriteLine($"RESULT: {result}");
+HomeWork homework = new HomeWork();
 
+Console.WriteLine(homework.Task25starred());
 class HomeWork{
 
         //TODO starred  - calculator;
@@ -14,6 +12,11 @@ class HomeWork{
             result*=(BigInteger)A;
         }
         return result;
+    }
+
+
+    public double Task25starred(){
+        return new Calculator().Calculate();
     }
 
         //TODO starred  - using string// 
@@ -54,7 +57,6 @@ class Calculator{
         this.priority = priority;
         first_number = numbers.Dequeue();
         recursive = true;
-        Console.WriteLine("Copied");
     }
 
 
@@ -102,7 +104,7 @@ class Calculator{
     {
         unsafe
         {
-            Console.Write("Enter an expression");
+            Console.Write("Enter an expression (+,-,*,/,^): ");
             String data = Console.ReadLine()??"0";
             fixed (char* ptr = data)
             {
@@ -222,16 +224,12 @@ class Calculator{
 
             
             if (ops.Peek().Method.Name == "pow"){
-                Console.WriteLine("Pow");
                 second_number = numbers.Dequeue();
                 ops.Dequeue()(this);
-                Console.WriteLine($"Returned pow: {second_number}");
                 
             }
 
             else if(ops.Peek().Method.Name == "mult" || ops.Peek().Method.Name == "div"){
-                Console.WriteLine("Mult");
-                Console.WriteLine(first_number);
                 //Returning partial result if the current priority is less than the entry-point priority
                 if(priority> 1) return first_number;
                 Action<Calculator> tempMethod = ops.Dequeue();
@@ -249,11 +247,9 @@ class Calculator{
                     second_number = numbers.Dequeue();
                     tempMethod(this);
                 }
-                Console.WriteLine($"Returned mult: {second_number}");
 
             }
             else {
-                Console.WriteLine("Sum");
                 if(priority> 0) return first_number;
                 Action<Calculator> tempMethod = ops.Dequeue();
                 if(ops.Count == 0){
@@ -270,9 +266,7 @@ class Calculator{
                     tempMethod(this);
                 }
                 
-                Console.WriteLine($"Returned sum: {second_number}");
             }
-            Console.WriteLine("Operated");
 
         
     }
