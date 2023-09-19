@@ -1,12 +1,19 @@
 ﻿using System.Numerics;
-using System.Security.Cryptography.X509Certificates;
 
 HomeWork homework = new HomeWork();
+Console.WriteLine($"*Task25*");
+Console.WriteLine($"            Result: {homework.Task25starred()}");
 var end = DateTime.Now;
-var start = DateTime.Now;
-Console.WriteLine(homework.Task25starred());
-end = DateTime.Now;
-Console.WriteLine(end-start);
+Console.WriteLine("*Task27*");
+Console.WriteLine($"    Result: {homework.Task27starred()}");
+Console.WriteLine("*Task29");
+homework.Task29starred();
+Console.WriteLine("**Task29**");
+homework.Task29starredStarred();
+
+
+
+
 class HomeWork{
     public BigInteger Task25(int A, int B){
         BigInteger result = 1;
@@ -18,11 +25,13 @@ class HomeWork{
 
 
     public double Task25starred(){
-        return new Calculator().Calculate();
-    }
+        double result = new Calculator().Calculate();
 
-        //TODO starred  - using string// 
-    public int Task27(int n){
+        var end = DateTime.Now;
+        Console.WriteLine($"           Elapsed: {end-Calculator.start}");
+        return result;
+    }
+    private int Task27calculation(int n){
         int result = 0;
         while (n!=0){
             result+=n%10;
@@ -32,19 +41,71 @@ class HomeWork{
     }
 
 
+    public int Task27starred(){
+        int n = int.Parse(readData());
+        var end = DateTime.Now;
+        var start = DateTime.Now;
+        int result = Task27calculation(n);
+        end = DateTime.Now;
+        Console.WriteLine($"     Elapsed: {end-start}");
+        return result;
+    }
+
+    public void Task29starred(){
+        Console.Write("Enter a size of the array: ");
+        int size = int.Parse(readData());
+        Console.WriteLine();
+        Console.Write("Enter the least value: ");
+        int lvalue = int.Parse(readData());     
+        Console.WriteLine();  
+        Console.Write("Enter the top value: ");
+        int rvalue = int.Parse(readData());     
+        Console.WriteLine();  
+        int[] array = Task29starredBuildArray(lvalue,rvalue,size);
+        Console.Write("Result: [");
+        for(int i = 0; i < size-1; ++i){
+            Console.Write(array[i]);
+            Console.Write(", ");
+        }
+        Console.WriteLine($"{array[size-1]}]");
+
+    }
+    private int[] Task29starredBuildArray(int lvalue, int rvalue, int size)
+    {
+        int[] array= new int[size];
+        var srand = new Random().Next();
+        var rand = new Random(srand);
+        for(int i = 0; i < size; ++i)
+        {
+            rand = new Random(srand+(rand.Next()%(i+size)));
+            array[i] = rand.Next(lvalue,rvalue+1);
+        }
+        return array;
+
+    }
+    public void Task29starredStarred(){
+        String names = "Peter, John, James, Andrew, Philip, Bartholomew, Thomas, Matthew, James, Judas the Zealot, Simon, Judas Iscariot";
+        String[] namesArray = names.Split(", ");
+        int index = new Random().Next(namesArray.Length);
+        Console.WriteLine(namesArray[index]);
+    }
+
+
+
 
     private String readData(){
         return Console.ReadLine()??"0";
     }
 
-            //TODO random name choice;
 }
 
 
 
 class Calculator{
 
-
+    //Used to evaluate algorithm
+    public static DateTime start = new DateTime();
+    
     //Operations Queue
     static private Queue<Action<Calculator>> ops = new Queue<Action<Calculator>>();
     //Numbers Queue
@@ -221,11 +282,9 @@ class Calculator{
         //Check if init
         if(!recursive) {
             Parser();
-            end = DateTime.Now;
-
+            start = DateTime.Now;
             first_number = numbers.Dequeue();
         }
-        Console.WriteLine(ops.Count());
 
         //Check last
         while(numbers.Count() > 0){
