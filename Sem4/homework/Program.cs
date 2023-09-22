@@ -1,17 +1,18 @@
 ﻿using System.Numerics;
 
-HomeWork homework = new HomeWork();
-Console.WriteLine($"*Task25*");
-Console.WriteLine($"            Result: {homework.Task25starred()}");
-var end = DateTime.Now;
-Console.WriteLine("*Task27*");
-Console.WriteLine($"    Result: {homework.Task27starred()}");
-Console.WriteLine("*Task29");
-homework.Task29starred();
-Console.WriteLine("**Task29**");
-homework.Task29starredStarred();
+// HomeWork homework = new HomeWork();
+// Console.WriteLine($"*Task25*");
+// Console.WriteLine($"            Result: {homework.Task25starred()}");
+// var end = DateTime.Now;
+// Console.WriteLine("*Task27*");
+// Console.WriteLine($"    Result: {homework.Task27starred()}");
+// Console.WriteLine("*Task29");
+// homework.Task29starred();
+// Console.WriteLine("**Task29**");
+// homework.Task29starredStarred();
 
 
+Console.WriteLine(new Calculator().Calculate());
 
 
 class HomeWork{
