@@ -1,4 +1,3 @@
-﻿
 using System.Linq.Expressions;
 using System.Net.Http;
 using System.Text;
@@ -203,6 +202,3 @@ class HomeWork
 
 
 }
-
-
-

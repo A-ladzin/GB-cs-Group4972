@@ -9,13 +9,6 @@
     return array;
 }
 
-void inverseArray(int[] arr){
-    foreach(ref int i in arr){
-        i *= -1;
-    }
-
-}
-
 
 
 void PrintArray(int[] arr)
@@ -31,5 +24,10 @@ void PrintArray(int[] arr)
 (int, int, int) a = (int.Parse(Console.ReadLine()??"0"), int.Parse(Console.ReadLine()??"0"), int.Parse(Console.ReadLine()??"0"));
 var arr = GenArray(a.Item1, a.Item2, a.Item3);
 PrintArray(arr);
-inverseArray(arr);
-PrintArray(arr);
+
+
+var arrrr = arr.Reverse();
+foreach(var e in arrrr){
+        Console.Write($"{e}, ");
+    }
+    Console.WriteLine();
