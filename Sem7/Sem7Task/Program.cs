@@ -1,6 +1,6 @@
 ﻿
 
-Task t = new Task48();
+Task t = new Task49();
 t.Run();
 
 abstract class Task
@@ -76,5 +76,32 @@ class Task48: Task
     {
         Task.Print2DArray<int>(FillArray(m,n));
     }
+
+}
+
+
+class Task49: Task
+
+{
+    private int[,] array = Gen2DArray(ReadData(),ReadData(), -1000,1000);
+    
+    private void squareEvens(int[,] array)
+    {
+        for(int i = 0; i < array.GetLength(0); i+=2)
+        {
+            for (int j = 0; j < array.GetLength(1); j+=2)
+            {
+                array[i,j] = array[i,j]*array[i,j];
+            }
+        }
+    }
+
+    public override void Run()
+    {
+        squareEvens(array);
+        Task.Print2DArray<int>(array);
+    }
+
+
 
 }
