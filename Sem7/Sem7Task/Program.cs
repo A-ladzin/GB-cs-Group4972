@@ -1,6 +1,6 @@
 ﻿
 
-Task t = new Task49();
+Task t = new Task51();
 t.Run();
 
 abstract class Task
@@ -103,6 +103,46 @@ class Task49: Task
         squareEvens(array);
         Console.WriteLine();
         Task.Print2DArray<int>(array);
+    }
+
+
+
+}
+
+
+class Task51: Task
+{
+
+    public Task51(){
+        Console.WriteLine("Enter m, n line by line: ");
+        int m = ReadData();
+        int n = ReadData();
+        minAxis = m < n? m: n;
+        array = Gen2DArray(m,n,-2147483648/minAxis,2147483647/minAxis);
+    }
+
+    private int minAxis;
+    private int m;
+
+    private int n;
+    private int[,] array;
+
+    private int sum = 0;
+
+    
+    private void findSumMain()
+    {
+        for (int i = 0; i < minAxis; i++)
+        sum+=array[i,i];
+    }
+
+    public override void Run()
+    {
+        Console.WriteLine("Init array: ");
+        Task.Print2DArray<int>(array);
+        findSumMain();
+        Console.WriteLine();
+        Console.WriteLine($"Sum: {sum}");
     }
 
 
