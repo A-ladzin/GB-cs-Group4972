@@ -98,8 +98,10 @@ class Task49: Task
 
     public override void Run()
     {
+        Console WriteLine("Enter m, n line by line: ")
         Task.Print2DArray<int>(array);
         squareEvens(array);
+        Console.WriteLine();
         Task.Print2DArray<int>(array);
     }
 
