@@ -33,10 +33,13 @@ public static void Print2DArray<T>(T[,] array)
     Console.Write($"{array[i,array.GetLength(1)-1]}],");
     Console.WriteLine();
     }
+    Console.Write("[");
     for(int j = 0; j < array.GetLength(1)-1; j++)
+    
     {
     {
         Console.Write($"{array[array.GetLength(0)-1,j]}, ");
+        
     }
     }
     Console.Write($"{array[array.GetLength(1)-1,array.GetLength(1)-1]}]");
