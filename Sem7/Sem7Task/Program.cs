@@ -98,6 +98,7 @@ class Task49: Task
 
     public override void Run()
     {
+        Task.Print2DArray<int>(array);
         squareEvens(array);
         Task.Print2DArray<int>(array);
     }
