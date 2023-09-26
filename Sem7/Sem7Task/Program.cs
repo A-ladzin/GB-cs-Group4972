@@ -42,7 +42,7 @@ public static void Print2DArray<T>(T[,] array)
         
     }
     }
-    Console.Write($"{array[array.GetLength(1)-1,array.GetLength(1)-1]}]");
+    Console.Write($"{array[array.GetLength(0)-1,array.GetLength(1)-1]}]");
     Console.WriteLine("]");
 }
 
