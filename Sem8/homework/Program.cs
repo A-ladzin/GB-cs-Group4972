@@ -1,5 +1,5 @@
 ﻿HomeTask t;
-t = new Task58();
+t = new Task62();
 t.run();
 
 
@@ -29,6 +29,9 @@ public static class MatrixExtensions
         return colVector;
     }
 }
+
+
+
 abstract class HomeTask
 {
 
@@ -100,7 +103,77 @@ abstract class HomeTask
 
     abstract public void run();
 }
+class Task62: HomeTask
+{
 
+    private int[,] SpiralBuild(int n = 4, int m = 4)
+    {
+        int top = 1;
+        int bot = n-1;
+        int count = 1;
+        int right = m-1;
+        int left = 0;
+        (int,int) curr = (0,0);
+        int[,] array = new int[n,m];
+
+        while(count <= m*n)
+        {
+            while(curr.Item2 < right)
+            {
+                array[curr.Item1,curr.Item2] = count;
+                curr.Item2++;
+                count++;
+                if(count > m*n) return array;
+            }
+            array[curr.Item1,curr.Item2] = count;
+            curr.Item1++;
+            count++;
+            if(count > m*n) return array;
+            right--;
+            while(curr.Item1<bot)
+            {
+                array[curr.Item1,curr.Item2] = count;
+                curr.Item1++;
+                count++;
+                if(count > m*n) return array;
+            }
+            array[curr.Item1,curr.Item2] = count;
+            curr.Item2--;
+            count++;
+            if(count > m*n) return array;
+            bot--;
+            while(curr.Item2 > left)
+            {
+                array[curr.Item1,curr.Item2] = count;
+                curr.Item2--;
+                count++;
+                if(count > m*n) return array;
+            }
+            array[curr.Item1,curr.Item2] = count;
+            count++;
+            if(count > m*n) return array;
+            left++;
+            curr.Item1--;
+            while(curr.Item1 > top)
+            {
+                array[curr.Item1,curr.Item2] = count;
+                curr.Item1--;
+                count++;
+                if(count > m*n) return array;
+            }
+            array[curr.Item1,curr.Item2] = count;
+            count++;
+            if(count > m*n) return array;
+            top++;
+            curr.Item2++;
+        }
+        return array;
+    }
+    public override void run()
+    {
+        Print2DArray<int>(SpiralBuild());
+    }
+}
 class Task60: HomeTask
 {
 
@@ -108,15 +181,15 @@ class Task60: HomeTask
     public override void run()
     {
         Console.Write("Enter x-dim size: ");
-        int x = ReadData()
+        int x = ReadData();
         Console.WriteLine();
                 Console.Write("Enter y-dim size: ");
-        int y = ReadData()
+        int y = ReadData();
         Console.WriteLine();
                 Console.Write("Enter z-dim size: ");
-        int z = ReadData()
+        int z = ReadData();
         Console.WriteLine();
-        int [,,,] array = Gen3DArray(x,y,z);
+        int [,,] array = Gen3DArray(x,y,z);
 
         for(int i = 0; i < x; i ++)
         {
@@ -124,7 +197,7 @@ class Task60: HomeTask
             {
                 for(int k = 0; k < z ; k++)
                 {
-                    Console.WriteLine()
+                    Console.WriteLine($"{array[i,j,k]}({i},{j},{k})");
                 }
             }
         }
