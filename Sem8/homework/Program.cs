@@ -51,6 +51,7 @@ abstract class HomeTask
         }
         int[,,]array = new int[x,y,z];
         int[] memo = new int[x*y*z];
+        int next_index = 0;
         Random rand = new Random();
         for(int i = 0; i < x; i ++)
         {
@@ -75,7 +76,11 @@ abstract class HomeTask
                             if(found){
                                 array[i,j,k] =rand.Next(low,high);
                             }
-                            else check = false;
+                            else{
+                                memo[next_index] = array[i,j,k];
+                                next_index++;
+                                check = false;
+                            } 
                         }
                     }
                 }
