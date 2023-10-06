@@ -1,4 +1,12 @@
 ﻿HomeTask t;
+t = new Task54();
+t.run();
+t = new Task56();
+t.run();
+t = new Task58();
+t.run();
+t = new Task60();
+t.run();
 t = new Task62();
 t.run();
 
@@ -29,7 +37,6 @@ public static class MatrixExtensions
         return colVector;
     }
 }
-
 
 
 abstract class HomeTask
@@ -105,7 +112,9 @@ abstract class HomeTask
 }
 class Task62: HomeTask
 {
-
+    public Task62(){
+        Console.WriteLine("\tTask62\n");
+    }
     private int[,] SpiralBuild(int n = 4, int m = 4)
     {
         int top = 1;
@@ -176,7 +185,9 @@ class Task62: HomeTask
 }
 class Task60: HomeTask
 {
-
+    public Task60(){
+        Console.WriteLine("\tTask62\n");
+    }
 
     public override void run()
     {
@@ -206,6 +217,9 @@ class Task60: HomeTask
 class Task58 : HomeTask
 {
 
+    public Task58(){
+        Console.WriteLine("\tTask62\n");
+    }
     public override void run()
     {
 
@@ -245,7 +259,9 @@ class Task58 : HomeTask
 }
 class Task56 : HomeTask
 {
-    public Task56() { Console.WriteLine("Task56\n"); }
+        public Task56(){
+        Console.WriteLine("\tTask56\n");
+    }
 
     public override void run()
     {
@@ -285,9 +301,8 @@ class Task56 : HomeTask
 class Task54 : HomeTask
 {
 
-    public Task54()
-    {
-        Console.WriteLine("Task54");
+    public Task54(){
+        Console.WriteLine("\tTask54\n");
     }
 
 
