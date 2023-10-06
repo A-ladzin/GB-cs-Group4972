@@ -43,9 +43,14 @@ abstract class HomeTask
 {
 
 
-    protected static int[,,] Gen3DArray(int x, int y, int z, int low = -2147483648, int high = 2147483647 )
+    protected static int[,,] Gen3DArray(int x, int y, int z, int low = -2147483648, int high = 2147483647, bool unique = false )
     {
+        if (unique && x*y*z > high - low){
+            Console.WriteLine("Empty spaces");
+            return new int[0,0,0];
+        }
         int[,,]array = new int[x,y,z];
+        int[] memo = new int[x*y*z];
         Random rand = new Random();
         for(int i = 0; i < x; i ++)
         {
@@ -54,6 +59,25 @@ abstract class HomeTask
                 for(int k = 0; k < z ; k++)
                 {
                     array[i,j,k] = rand.Next(low,high);
+                    if(unique)
+                    {
+                        bool check = true;
+                        while(check)
+                        {
+                            bool found = false;
+                            foreach(int e in memo)
+                            {
+                                if (e == array[i,j,k]){
+                                    found = true;
+                                    break;
+                                } 
+                            }
+                            if(found){
+                                array[i,j,k] =rand.Next(low,high);
+                            }
+                            else check = false;
+                        }
+                    }
                 }
             }
         }
@@ -186,7 +210,7 @@ class Task62: HomeTask
 class Task60: HomeTask
 {
     public Task60(){
-        Console.WriteLine("\tTask62\n");
+        Console.WriteLine("\tTask60\n");
     }
 
     public override void run()
@@ -200,13 +224,13 @@ class Task60: HomeTask
                 Console.Write("Enter z-dim size: ");
         int z = ReadData();
         Console.WriteLine();
-        int [,,] array = Gen3DArray(x,y,z);
+        int [,,] array = Gen3DArray(x,y,z, 10,100, unique : true);
 
-        for(int i = 0; i < x; i ++)
+        for(int i = 0; i < array.GetLength(0); i ++)
         {
-            for (int j = 0; j < y; j++)
+            for (int j = 0; j < array.GetLength(1); j++)
             {
-                for(int k = 0; k < z ; k++)
+                for(int k = 0; k < array.GetLength(2) ; k++)
                 {
                     Console.WriteLine($"{array[i,j,k]}({i},{j},{k})");
                 }
@@ -218,7 +242,7 @@ class Task58 : HomeTask
 {
 
     public Task58(){
-        Console.WriteLine("\tTask62\n");
+        Console.WriteLine("\tTask58\n");
     }
     public override void run()
     {
